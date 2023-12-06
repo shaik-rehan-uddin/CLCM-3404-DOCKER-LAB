@@ -1,7 +1,7 @@
-# WEEK-1-LAB-CLCM-3403
-Week-1 Lab of CLCM-3403 Course (Web Development with HTML, CSS and JS)
+# LAB-CLCM-3404-DOCKER-LAB
+Lab of CLCM-3404 Course to deploy a static site with Docker and Github Actions
 
 ##  Technologies used :
-- HTML, CSS, JavaScript, Bootstrap, jQuery
-
-### Live Deployment : [https://shaik-rehan-uddin.github.io/WEEK-1-LAB-CLCM-3403/](https://shaik-rehan-uddin.github.io/WEEK-1-LAB-CLCM-3403/)
+- HTML, CSS, JavaScript
+- Docker
+- GitHub Actions
