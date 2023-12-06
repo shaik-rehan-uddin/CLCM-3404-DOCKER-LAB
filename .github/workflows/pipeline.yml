@@ -28,6 +28,24 @@ jobs:
         echo $(docker images)
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-application:latest
 
+    - name: Check Docker Image Build
+      run: |
+        if docker inspect my-application:latest &> /dev/null; then
+          echo "Docker image built successfully. Test passed!"
+        else
+          echo "Docker image not found. Test failed."
+          exit 1
+        fi
+
+    - name: Check Docker Image Pushed
+      run: |
+        if docker manifest inspect ${{ secrets.DOCKERHUB_USERNAME }}/my-application:latest &> /dev/null; then
+          echo "Docker image pushed to Docker Hub successfully. Test passed!"
+        else
+          echo "Docker image not found on Docker Hub. Test failed."
+          exit 1
+        fi
+
     - name: Logout from Docker Hub
       run: docker logout
 
@@ -53,3 +71,18 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-application:latest
             docker run -d -p 80:80 --name my-application ${{ secrets.DOCKERHUB_USERNAME }}/my-application:latest
             docker image prune -f
+  
+  testing:
+    needs: deploy-to-ec2
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Run Site Accessibility Test
+      run: |
+        response_code=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.HOST_DNS }}/)
+        if [ "$response_code" -eq "200" ]; then
+          echo "Site is accessible. Test passed!"
+        else
+          echo "Site is not accessible. Test failed."
+          exit 1
+        fi
